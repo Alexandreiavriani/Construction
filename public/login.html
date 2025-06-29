@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход</title>
+  <link rel="stylesheet" href="css/register_and_login.css">
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+  <div class="form-container">
+    <h1>Log In</h1>
+    <div style="top: -10px; position: relative;" id="loginError" class="error">Incorrect email or password</div>
+    <form id="loginForm" method="POST" action="/user/login" novalidate>
+      <div class="input-group">
+        <input type="email" placeholder="Email" id="email" name="email"  />
+      </div>
+
+      <div class="input-group password-container">
+        <input type="password" placeholder="Password" id="password" name="password"  />
+
+          <span id="togglePassword" class="password-toggle">
+    <i class="fa fa-eye"></i>
+  </span>
+
+      </div>
+
+      <button type="submit" class="btn">Log In</button>
+
+    <div class="login-links">
+  <a href="forgot_password.html" class="link">forgot password?</a>
+  <a href="register.html" class="link">Sign up</a>
+</div>
+    </form>
+  </div>
+
+  
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+      const form       = document.getElementById("loginForm");
+      const loginError = document.getElementById("loginError");
+      const emailEl    = form.elements["email"];
+      const passEl     = form.elements["password"];
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        loginError.style.display = "none";
+        emailEl.classList.remove("input-error");
+        passEl.classList.remove("input-error");
+
+        // 1) Встроенная валидация HTML5
+        if (!form.checkValidity()) {
+          // покажем стандартные сообщения о required / type=email
+          return form.reportValidity();
+        }
+
+        const email    = emailEl.value.trim();
+        const password = passEl.value;
+
+        // 2) Кастомный формат email
+
+        if (!email) {
+          loginError.textContent = "Enter Email";
+          emailEl.classList.add("input-error");
+          loginError.style.display = "block";
+
+          return;
+        }
+
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRe.test(email)) {
+
+          loginError.textContent = "Incorrect email";
+          emailEl.classList.add("input-error");
+          loginError.style.display = "block";
+
+          return;
+        }
+
+         // 3) Проверка password не пустой
+        if (!password) {
+          loginError.textContent = "Enter Password";
+          passEl.classList.add("input-error");
+          loginError.style.display = "block";
+          return;
+        }
+
+        // 4) Минимальная длина пароля
+        if (password.length < 6) {
+          loginError.textContent = "Minimum 6-character password";
+          passEl.classList.add("input-error");
+          loginError.style.display = "block";
+          return;
+        }
+        // 5) Отправляем на сервер через fetch
+        try {
+          const res = await fetch("/user/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ email, password })
+          });
+          if (res.ok) {
+            window.location.href = "/";
+          } else if (res.status === 401) {
+            loginError.textContent = "Incorrect email or password";
+            loginError.style.display = "block";
+          } else {
+            loginError.textContent = "Incorrect email or password";
+            loginError.style.display = "block";
+          }
+        } catch {
+          loginError.textContent = "Network error";
+          loginError.style.display = "block";
+        }
+       });
+    });
+</script>
+
+<script>
+  //eye password
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("togglePassword");
+  const pwd    = document.getElementById("password");
+  const icon   = toggle.querySelector("i");
+
+  toggle.addEventListener("click", () => {
+    // если сейчас тип password — поменяем на text (показываем) и иконку на "зачёркнутый глаз"
+    if (pwd.type === "password") {
+      pwd.type = "text";
+      icon.classList.replace("fa-eye", "fa-eye-slash");
+    } 
+    // иначе — вернулись к типу password и иконку на обычный "глаз"
+    else {
+      pwd.type = "password";
+      icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  });
+});
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const verified = params.get("verified");
+
+    if (verified === "1") {
+      const messageDiv = document.createElement("div");
+      messageDiv.textContent = "Email successfully verified! You can now log in.";
+      messageDiv.style.backgroundColor = "#d4edda";
+      messageDiv.style.color = "#155724";
+      messageDiv.style.padding = "10px 15px";
+      messageDiv.style.marginBottom = "15px";
+      messageDiv.style.borderRadius = "5px";
+      messageDiv.style.border = "1px solid #c3e6cb";
+      messageDiv.style.textAlign = "center";
+
+      const form = document.querySelector("form"); // Или куда хочешь вставить
+      form.parentNode.insertBefore(messageDiv, form);
+
+      // Убираем сообщение через 5 секунд
+      setTimeout(() => {
+        messageDiv.remove();
+      }, 5000);
+    }
+  });
+</script>
+   
+<script>
+  // 🆕 если авторизированный пользователь зашел в login,его перенаправят обратно в index
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/api/check-auth")
+    .then(res => res.json())
+    .then(data => {
+      if (data.loggedIn) {
+        window.location.href = "/"; // или /index.html
+      }
+    });
+});
+</script>
+</body>
+</html>
+

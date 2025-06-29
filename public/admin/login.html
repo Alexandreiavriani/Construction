@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Log in to admin panel</title>
+  <link rel="stylesheet" href="../admin/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../admin/dist/css/adminlte.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="login-page">
+
+<div class="login-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <b>Log In to admin panel</b>
+    </div>
+    <div class="card-body">
+      <form  method="POST" action="/admin/login" id="loginForm">
+        <div class="input-group mb-3">
+          <input type="text" name="username" class="form-control" placeholder="Name" required>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fas fa-user"></span></div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="password_admin" class="form-control" placeholder="Password" required>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fas fa-lock"></span></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="../admin/plugins/jquery/jquery.min.js"></script>
+<script>
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const formData = new FormData(this);
+  fetch(this.action, {
+    method: 'POST',
+    body: JSON.stringify({
+      username: formData.get('username'),
+      password_admin: formData.get('password_admin')
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => {
+    if (res.ok) {
+      window.location.href = '/admin';
+    } else {
+      alert('incorrect name or password');
+    }
+  });
+});
+</script>
+
+</body>
+</html>

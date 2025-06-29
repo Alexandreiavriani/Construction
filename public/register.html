@@ -1,0 +1,228 @@
+
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <link rel="stylesheet" href="css/register_and_login.css">
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+/>
+
+</head>
+<body>
+   <div class="form-container">
+    <h1>Registration</h1>
+    <form id="registerForm" action="/register" method="POST" novalidate>
+      <div class="input-group">
+        <input type="text" placeholder="First Name" id="first_name" name="first_name" required />
+        <div class="error" id="firstNameError"></div>
+      </div>
+
+      <div class="input-group">
+        <input type="text" placeholder="Last Name" id="last_name" name="last_name" required />
+        <div class="error" id="lastNameError"></div>
+      </div>
+
+      <div class="input-group">
+        <input type="email" placeholder="Email" id="email" name="email" required />
+        <div class="error" id="emailError"></div>
+      </div>
+
+      <div class="input-group password-container">
+        <input  type="password" placeholder="Password" id="password" name="password" required />
+        
+            <span id="togglePassword" class="password-toggle">
+    <i class="fa fa-eye"></i>
+  </span>
+        <div class="error" id="passwordError"></div>
+        
+      </div>
+
+      <div class="input-group">
+        <input type="password" placeholder="Confirm Password" id="confirm_password" name="confirm_password" required />
+        <div class="error" id="confirm_passwordError"></div>
+      </div>
+
+      <button type="submit" class="btn">Registration</button>
+      <p>Already have an account? <a href="login.html">Log in</a></p>
+    </form>
+  </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("registerForm");
+
+      form.addEventListener("submit", (e) => {
+        // отменяем отправку, будет отправлено только при отсутствии ошибок
+        e.preventDefault();
+
+        // сброс ошибок
+        document.querySelectorAll(".error").forEach(el => {
+          el.textContent = "";
+          el.style.display = "none";
+        });
+        document.querySelectorAll("input").forEach(el => el.classList.remove("input-error"));
+
+        // значения полей
+        const firstName = form.elements["first_name"].value.trim();
+        const lastName = form.elements["last_name"].value.trim();
+        const email = form.elements["email"].value.trim();
+        const password = form.elements["password"].value;
+        const confirm = form.elements["confirm_password"].value;
+
+        let hasError = false;
+
+        //валидация First Name
+        if (!firstName) {
+          showError("firstNameError", "Enter first name");
+          markInvalid("first_name");
+          hasError = true;
+        }
+
+        // валидация Last Name
+        if (!lastName) {
+          showError("lastNameError", "Enter last name");
+          markInvalid("last_name");
+          hasError = true;
+        } 
+        
+
+        if (!email) {
+          showError("emailError", "Enter email");
+          markInvalid("email");
+          hasError = true;
+        }
+
+
+        // валидация Email
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRe.test(email)) {
+          showError("emailError", "Incorrect email");
+          markInvalid("email");
+          hasError = true;
+        }
+
+    
+
+        if (!password) {
+          showError("passwordError", "Enter Password");
+          markInvalid("password");
+          hasError = true;
+        }
+
+
+        // валидация пароля
+        if (password.length < 6) {
+          showError("passwordError", "Minimum 6-character password");
+          markInvalid("password");
+          hasError = true;
+        }
+
+        if (!confirm) {
+          showError("confirmPasswordError", "Enter Password");
+          markInvalid("confirm_password");
+          hasError = true;
+        }
+
+        // проверка совпадения паролей
+        if (password !== confirm) {
+          showError("confirm_passwordError", "The passwords do not match");
+          markInvalid("confirm_password");
+          hasError = true;
+        }
+
+         
+
+        //если нет ошибок — отправляем форму
+        // if (!hasError) {
+        //   form.submit();
+        // }
+
+        if (!hasError) {
+          localStorage.removeItem("email_verified");
+
+          const formData = {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            password,
+            confirm_password: confirm   
+          };
+
+          // const loadingMessage = document.createElement("p");
+          // loadingMessage.textContent = "Please Wait,redirect....";
+          // loadingMessage.id = "loadingMessage";
+
+          // // Стили через JS:
+          // loadingMessage.style.color = "#007bff";           // Синий цвет текста
+          // loadingMessage.style.marginTop = "15px";          // Отступ сверху
+          // loadingMessage.style.fontWeight = "500";          // Среднее начертание
+          // loadingMessage.style.fontSize = "16px";           // Размер шрифта
+          // loadingMessage.style.textAlign = "center";        // Центрирование
+          // form.appendChild(loadingMessage);
+          
+          fetch("/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
+      
+            .then(async (res) => {
+            if (res.redirected) {
+              window.location.href = res.url;
+            } else {
+              const data = await res.json();
+              if (data.field && data.message) {
+                showError(`${data.field}Error`, data.message);
+                markInvalid(data.field);
+              }
+            }
+          })
+            .catch(err => {
+            document.getElementById("loadingMessage")?.remove();
+            console.error("Ошибка регистрации:", err);
+          });
+        }
+      });
+
+      function showError(id, message) {
+        const el = document.getElementById(id);
+        el.textContent = message;
+        el.style.display = "block";
+      }
+      function markInvalid(fieldId) {
+        document.getElementById(fieldId).classList.add("input-error");
+      }
+    });
+</script>
+
+
+<script>
+  //eye password
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.getElementById("togglePassword");
+  const pwd    = document.getElementById("password");
+  const icon   = toggle.querySelector("i");
+
+  toggle.addEventListener("click", () => {
+    // если сейчас тип password — поменяем на text (показываем) и иконку на "зачёркнутый глаз"
+    if (pwd.type === "password") {
+      pwd.type = "text";
+      icon.classList.replace("fa-eye", "fa-eye-slash");
+    } 
+    // иначе — вернулись к типу password и иконку на обычный "глаз"
+    else {
+      pwd.type = "password";
+      icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  });
+});
+</script>
+    
+</body>
+</html>

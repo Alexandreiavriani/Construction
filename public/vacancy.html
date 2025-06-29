@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career</title>
+
+  <!-- Ваши CSS-файлы -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/vacancy.css">
+
+
+  <!-- Bootstrap CSS (не трогаем стили nav/линков из ваших файлов) -->
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNVPTVnJ6MxUTj2bX96/hLZ9O+gNRF7Smh1cQF5yiQ0yvmWBi49"
+    crossorigin="anonymous"
+  />
+
+  <!-- Сторонние стили -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+
+</head>
+<body>
+
+
+  <div id="site-header"></div>
+
+  <div id="imageModal" style="display:none; position:fixed; z-index:1000; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
+  <img id="modalImage" src="" alt="Увеличенное изображение" style="max-width:90%; max-height:90%;">
+</div>
+
+ <div class="hero-section">
+    <img
+      style="height: 300px;"
+      src="images/construcion img.jpg"
+      alt="Construction"
+      class="hero-img"
+    />
+    <div class="hero-overlay">
+      <h1>Career</h1>
+      
+    </div>
+  </div>
+
+
+
+
+<h1 class="page-title">Current Vacancies</h1>
+<p class="page-title2">To view a vacancy in detail, click on the vacancy you are interested in
+</p>
+<div class="vacancy-list">
+  <div class="vacancy-item header">
+    <div class="position">Position</div>
+    <div class="location">Location</div>
+    <div class="job-type">Type</div>
+    <div class="actions"></div>
+  </div>
+  <div id="vacancyContainer"></div>
+</div>
+
+<script>
+  async function loadVacancies() {
+    const resp = await fetch('/vacancies?limit=100&offset=0');
+    const { items } = await resp.json();
+    const container = document.getElementById('vacancyContainer');
+    container.innerHTML = '';
+
+
+    if (!items.length) {
+    // если нет ни одной вакансии
+    container.innerHTML = `
+      <div class="no-vacancies">
+        <p>К сожалению, в данный момент нет открытых вакансий.</p>
+      </div>
+    `;
+    return;
+  }
+
+
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'vacancy-item';
+      row.dataset.id = item.id;
+      row.innerHTML = `
+        <div class="position">${item.position}</div>
+        <div class="location">${item.location}</div>
+        <div class="job-type">${item.job_type}</div>
+        <div class="actions"><span class="arrow">▼</span></div>
+      `;
+
+
+      row.addEventListener('click', () => toggleDetails(row, item.id));
+      container.appendChild(row);
+
+      requestAnimationFrame(() => {
+      row.classList.add('fade-in');
+    });
+    
+    });
+  }
+
+  async function toggleDetails(row, id) {
+    const arrow = row.querySelector('.arrow');
+    // уже открыт?
+    const existing = row.querySelector('.vacancy-details');
+    if (existing) {
+      existing.remove();
+      row.classList.remove('open');
+      arrow.textContent = '▼';
+      return;
+      
+    }
+    // загрузим детали
+    const resp = await fetch(`/vacancies/${id}/details`);
+    const data = await resp.json();
+    const details = document.createElement('div');
+    details.className = 'vacancy-details';
+    details.innerHTML = `
+      <p>${data.description||'—'}</p>
+      <h4>Responsibilities</h4><ul>${(data.responsibilities||'')
+        .split('\n').map(l=>`<li>${l.replace(/^•\s*/,'')}</li>`).join('')}</ul>
+      <h4>Requirements</h4><ul>${(data.requirements||'')
+        .split('\n').map(l=>`<li>${l.replace(/^•\s*/,'')}</li>`).join('')}</ul>
+      <h4>We Offer</h4><ul>${(data.we_offer||'')
+        .split('\n').map(l=>`<li>${l.replace(/^•\s*/,'')}</li>`).join('')}</ul>
+        <p>
+    Interested persons are requested to send their resume to
+    <a href="mailto:example@test.ge">example@test.ge</a>
+    and indicate the job title in the subject line.
+  </p>
+  <p>
+    Or <a href="contact.html">send from the contact page</a>.
+  </p>
+    `;
+    row.appendChild(details);
+    row.classList.add('open');
+    arrow.textContent = '▲';
+  }
+
+  document.addEventListener('DOMContentLoaded', loadVacancies);
+</script>
+
+
+
+
+
+<section class="contact-us-block">
+  <div class="container">
+    <div class="contact-us-wrapper">
+      <img src="images/contact img.jpg" alt="Наш офис" class="contact-us-image" />
+      <div class="contact-us-text">
+        <p>
+          We are a  construction company in Georgia, specializing in 
+          premium residential and commercial projects. Our mission is to create comfortable and eco-friendly spaces for living and working.
+          <br>
+          Are you interested in our services? We would be delighted to assist you.
+        </p>
+        <a  href="tel:+995123456789" class="btn contact-us-btn">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+ 
+
+ <div id="site-footer"></div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script src="main.js"></script>
+</body>
+</html>

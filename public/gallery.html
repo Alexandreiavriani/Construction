@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery</title>
+
+  <script defer src="https://unpkg.com/i18next@21.6.16/dist/umd/i18next.min.js"></script>
+  <script defer src="https://unpkg.com/i18next-http-backend@1.4.1/i18nextHttpBackend.min.js"></script>
+  <script defer src="/i18n.js"></script>
+
+  <!-- Ваши CSS-файлы -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/gallery.css" />
+
+  <!-- Bootstrap CSS (не трогаем стили nav/линков из ваших файлов) -->
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNVPTVnJ6MxUTj2bX96/hLZ9O+gNRF7Smh1cQF5yiQ0yvmWBi49"
+    crossorigin="anonymous"
+  />
+
+  <!-- Сторонние стили -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+
+</head>
+<body>
+
+
+  <div id="site-header"></div>
+
+  <div id="imageModal" style="display:none; position:fixed; z-index:1000; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
+  <img id="modalImage" src="" alt="Увеличенное изображение" style="max-width:90%; max-height:90%;">
+</div>
+
+ <div class="hero-section">
+    <img
+      style="height: 300px;"
+      src="images/construcion img.jpg"
+      alt="Construction"
+      class="hero-img"
+    />
+    <div class="hero-overlay">
+      <h1>Gallery</h1>
+    </div>
+  </div>
+
+  <div class="gallery-container">
+    <!-- Навигационные вкладки -->
+    <ul class="nav nav-tabs justify-content-center" id="galleryTabs" role="tablist">
+      <li class="nav-item">
+        <a
+          class="nav-link active"
+          id="photos-tab"
+          data-toggle="tab"
+          href="#photos"
+          role="tab"
+          aria-controls="photos"
+          aria-selected="true"
+        >Photo</a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          id="videos-tab"
+          data-toggle="tab"
+          href="#videos"
+          role="tab"
+          aria-controls="videos"
+          aria-selected="false"
+        >Videos</a>
+      </li>
+    </ul>
+
+    <div class="tab-content mt-3">
+      <!-- Фото-контент -->
+      <div
+        class="tab-pane fade show active"
+        id="photos"
+        role="tabpanel"
+        aria-labelledby="photos-tab"
+      >
+        <div id="photosContainer" class="gallery-grid"></div>
+      </div>
+
+      <!-- Видео-контент -->
+      <div
+        class="tab-pane fade"
+        id="videos"
+        role="tabpanel"
+        aria-labelledby="videos-tab"
+      >
+        <div id="videosContainer" class="gallery-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="contact-us-block">
+  <div class="container">
+    <div class="contact-us-wrapper">
+      <img src="images/contact img.jpg" alt="Наш офис" class="contact-us-image" />
+      <div class="contact-us-text">
+        <p>
+          We are a  construction company in Georgia, specializing in 
+          premium residential and commercial projects. Our mission is to create comfortable and eco-friendly spaces for living and working.
+          <br>
+          Are you interested in our services? We would be delighted to assist you.
+        </p>
+        <a  href="tel:+995123456789" class="btn contact-us-btn">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <div id="site-footer"></div>
+
+  <!-- jQuery, Popper.js, Bootstrap JS -->
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu6d4wFh7s3+ZDZ/aJGzIJ1nCk5JXUlhZtpO2YNWBZC1Q6Y5"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+LyZam0rGa3A2xVn0OluQJoHdZEGeXgn3zVH9I3GxZUOzypR+0Ejh0iDh"
+    crossorigin="anonymous"
+  ></script>
+
+  <script defer>
+//     document.addEventListener('DOMContentLoaded', () => {
+//       // По умолчанию загружаем фото
+//       loadGallery('photo');
+
+//       // Обработчики клика вкладок
+//       document.getElementById('photos-tab').addEventListener('click', () => {
+//         loadGallery('photo');
+//       });
+//       document.getElementById('videos-tab').addEventListener('click', () => {
+//         loadGallery('video');
+//       });
+//     });
+
+//     async function loadGallery(type) {
+//       try {
+//         const res = await fetch(`/gallery?type=${type}`);
+//         if (!res.ok) throw new Error(`Status ${res.status}`);
+//         const data = await res.json();
+//         const items = data.items;
+
+//         const photosContainer = document.getElementById('photosContainer');
+//         const videosContainer = document.getElementById('videosContainer');
+
+//         // Очищаем оба контейнера
+//         photosContainer.innerHTML = '';
+//         videosContainer.innerHTML = '';
+
+//         const container = type === 'photo' ? photosContainer : videosContainer;
+//         console.log('items:', items);
+
+//     if (items.length === 0) {
+//   container.innerHTML = `
+//     <p class="empty-message">
+//       No ${type === 'photo' ? 'photo' : 'video'} to display.
+//     </p>
+//   `;
+//   return;
+// }
+
+//         items.forEach(item => {
+//           // Для каждого элемента создаём div.photo-card или div.video-card
+//         const card = document.createElement('div');
+
+//         if (type === 'photo') {
+//           card.className = 'photo-card';
+//           card.innerHTML = `
+//             <img src="${item.filepath}" alt="${escapeHtml(item.title)}" />
+//             <div class="photo-info">
+//               <p class="photo-title">${escapeHtml(item.title)}</p>
+//               <!-- при необходимости: <p class="photo-subtitle">кол-во фото или дата</p> -->
+//             </div>
+//           `;
+//         } else {
+//           card.className = 'video-card';
+//           let mediaHtml;
+//           if (item.filepath.startsWith('/uploads/')) {
+//             mediaHtml = `
+//               <video controls controlsList="nodownload">
+//                 <source src="${item.filepath}" type="video/mp4">
+//                 Ваш браузер не поддерживает видео.
+//               </video>
+//             `;
+//           } else {
+//             mediaHtml = `
+//               <div class="embed-responsive embed-responsive-16by9">
+//                 <iframe class="embed-responsive-item" src="${item.filepath}" allowfullscreen></iframe>
+//               </div>
+//             `;
+//           }
+//           card.innerHTML = `
+//             ${mediaHtml}
+//             <div class="video-info">
+//               <p class="video-title">${escapeHtml(item.title)}</p>
+//               <!-- при необходимости: <p class="video-subtitle">кол-во видео или дата</p> -->
+//             </div>
+//           `;
+//         }
+
+//         container.appendChild(card);
+//         });
+//       } catch (err) {
+//         console.error('Не удалось загрузить галерею:', err);
+//       }
+//     }
+
+//     function escapeHtml(str) {
+//       return str
+//         .replace(/&/g, '&amp;')
+//         .replace(/</g, '&lt;')
+//         .replace(/>/g, '&gt;');
+//     }
+
+
+ // 1) Переменные для состояния
+ // Текущее состояние: вкладка и язык
+  // Будем помнить, какой таб сейчас активен
+  let currentType = 'photo';
+
+  // 1. Настраиваем i18next
+  i18next
+    .use(i18nextHttpBackend)
+    .init({
+      lng: localStorage.getItem('lang') || 'en',
+      fallbackLng: 'en',
+      debug: true,
+      backend: { loadPath: 'locales/{{lng}}.json' }
+    }, () => {
+      // Переводим всё, что с data-i18n-key
+      document.querySelectorAll('[data-i18n-key]').forEach(el => {
+        el.textContent = i18next.t(el.getAttribute('data-i18n-key'));
+      });
+
+      // Запускаем первоначальную загрузку галереи
+      loadGallery(currentType, i18next.language);
+
+      // Вешаем клики на табы **только здесь**, чтобы DOM был готов
+      document.getElementById('photos-tab').addEventListener('click', () => {
+        currentType = 'photo';
+        loadGallery('photo', i18next.language);
+      });
+      document.getElementById('videos-tab').addEventListener('click', () => {
+        currentType = 'video';
+        loadGallery('video', i18next.language);
+      });
+    });
+
+  // 2. Функция смены языка (её вызывают inline-кнопки header.html)
+  window.changeLanguage = lang => {
+    i18next.changeLanguage(lang, () => {
+      localStorage.setItem('lang', lang);
+      // Обновляем статические тексты
+      document.querySelectorAll('[data-i18n-key]').forEach(el => {
+        el.textContent = i18next.t(el.getAttribute('data-i18n-key'));
+      });
+      // Перезагружаем галерею на текущем табе
+      loadGallery(currentType, lang);
+    });
+  };
+
+  // 3. Функция загрузки галереи
+  async function loadGallery(type, lang) {
+    // Очищаем оба контейнера
+    document.getElementById('photosContainer').innerHTML = '';
+    document.getElementById('videosContainer').innerHTML = '';
+
+    try {
+      const res = await fetch(`/gallery?type=${type}&lang=${lang}`);
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      const { items } = await res.json();
+
+      const container = 
+        type === 'photo'
+          ? document.getElementById('photosContainer')
+          : document.getElementById('videosContainer');
+
+      if (items.length === 0) {
+        container.innerHTML = `<p>No ${type} to display.</p>`;
+        return;
+      }
+      
+      items.forEach(item => {
+        const card = document.createElement('div');
+        if (type === 'photo') {
+          card.className = 'photo-card';
+          card.innerHTML = `
+            <img src="${item.filepath}" alt="${item.title}">
+            <div class="photo-info">
+              <p class="photo-title">${item.title}</p>
+            </div>`;
+        } else {
+          card.className = 'video-card';
+          const media = item.filepath.startsWith('/uploads/')
+            ? `<video controls>
+                 <source src="${item.filepath}" type="video/mp4">
+               </video>`
+            : `<iframe src="${item.filepath}" allowfullscreen></iframe>`;
+          card.innerHTML = `
+            ${media}
+            <div class="video-info">
+              <p class="video-title">${item.title}</p>
+            </div>`;
+        }
+        container.appendChild(card);
+      });
+    } catch (err) {
+      console.error('Error loading gallery:', err);
+    }
+  }
+  </script>
+
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+
+    // Открытие по клику на изображение
+    document.body.addEventListener('click', (e) => {
+      if (e.target.tagName === 'IMG' && e.target.closest('.photo-card')) {
+        modalImage.src = e.target.src;
+        modal.style.display = 'flex';
+      }
+    });
+
+    // Закрытие по клику на модалку
+    modal.addEventListener('click', () => {
+      modal.style.display = 'none';
+      modalImage.src = '';
+    });
+  });
+</script>
+
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script src="main.js"></script>
+</body>
+</html>

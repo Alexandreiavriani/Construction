@@ -1,0 +1,139 @@
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 125px;  
+}
+
+/* Container */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 0;
+}
+
+/* About Us */
+.about-us h2 {
+  font-size: 2rem;
+  margin-bottom: 60px; 
+}
+
+.about-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+}
+
+.about-text {
+  flex: 1 1 400px;
+}
+
+.about-text p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.about-image {
+  flex: 1 3 400px;
+
+  text-align: center;
+}
+
+.about-image img {
+   max-width: 100%;
+  height: auto;
+ 
+  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Mission & Vision */
+.mission-vision {
+  background: #fff;
+}
+
+.mission-vision .mv-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+}
+
+.mv-text {
+  flex: 1 1 400px;
+}
+
+.mv-text h3 {
+  font-size: 1.75rem;
+  color: #1381e9;
+  margin-bottom: 16px;
+}
+
+.mv-text p {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 32px;
+}
+
+/* родитель для коллажа */
+.mv-images.collage {
+  position: relative;
+  flex: 1 1 400px;
+  /* задаём высоту, чтобы контейнер «тянулся» под оба изображения */
+  min-height: 350px;
+  margin-top: 20px;
+}
+
+/* общий стиль для обоих изображений */
+.mv-images.collage .img {
+  position: absolute;
+  width: 70%;          /* подберите свой % (или фикс. ширину) */
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  
+
+
+}
+
+/* верхнее изображение */
+.mv-images.collage .img-top {
+  top: 0;
+  right: 0;            /* прижато к правому краю */
+  z-index: 2;
+}
+
+/* нижнее изображение */
+.mv-images.collage .img-bottom {
+  bottom: 0;
+  left: 0;             /* прижато к левому краю */
+  z-index: 1;
+}
+
+/* сами картинки подстраиваются под блок */
+.mv-images.collage .img img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* адаптив: на мобильных — просто друг под другом */
+@media (max-width: 767px) {
+  .mv-images.collage {
+    position: static;
+    min-height: auto;
+    margin-top: 40px;
+  }
+  .mv-images.collage .img {
+    position: static;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+

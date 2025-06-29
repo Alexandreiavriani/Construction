@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/" />
+ <link rel="stylesheet" href="/css/style.css" />
+ <link rel="stylesheet" href="/css/projects.css" />
+
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+ 
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous">
+</script>
+
+
+
+
+
+</head>
+<body>
+
+<div id="site-header"></div>
+
+ <div class="hero-section">
+    <img style="height: 300px;" src="images/construcion img.jpg" alt="Construction" class="hero-img" />
+    <div class="hero-overlay">
+      <h1>Projects</h1>
+    </div>
+  </div>
+
+  <div class="projects-intro">
+  <p>Here you can see our current and completed construction projects.</p>
+</div>
+  
+
+  <main >
+  <!-- Контейнер списка проектов -->
+  <div class="projects-page" id="projects-list">
+    <div class="tabs">
+      <button class="tab-button active" data-tab="active">Ongoing</button>
+      <button class="tab-button" data-tab="completed">Completed</button>
+    </div>
+    <div id="ongoing" class="tab-content active"></div>
+    <div id="completed" class="tab-content"></div>
+  </div>
+
+  <!-- Контейнер детальной страницы -->
+  <div id="project-detail" style="display:none;">
+    <!-- Здесь JS подставит детали -->
+  </div>
+</main>
+  
+
+
+<section class="contact-us-block">
+  <div class="container">
+    <div class="contact-us-wrapper">
+      <img src="images/contact img.jpg" alt="Наш офис" class="contact-us-image" />
+      <div class="contact-us-text">
+        <p>
+          We are a  construction company in Georgia, specializing in 
+          premium residential and commercial projects. Our mission is to create comfortable and eco-friendly spaces for living and working.
+          <br>
+          Are you interested in our services? We would be delighted to assist you.
+        </p>
+        <a  href="tel:+995123456789" class="btn contact-us-btn">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<div id="site-footer"></div>
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const pathParts = location.pathname.split('/').filter(Boolean);
+  if (pathParts[0] === 'projects' && pathParts[1]) {
+    // Детальная страница, например /projects/42
+    loadProjectDetail(pathParts[1]);
+  } else {
+    // Страница списка
+    loadProjectsList();
+  }
+});
+
+// 1) Загрузка и рендер списка
+function loadProjectsList() {
+  let allProjects = [];
+  fetch('/api/projects')
+    .then(r => r.json())
+    .then(data => {
+      allProjects = data;
+      renderProjectsList(allProjects, 'active');
+      setupTabs(allProjects);
+    })
+    .catch(console.error);
+}
+
+function renderProjectsList(allProjects, status) {
+  document.getElementById('project-detail').style.display = 'none';
+  document.getElementById('projects-list').style.display = '';
+
+  const intro = document.querySelector('.projects-intro');
+  if (intro) intro.style.display = '';
+
+  const ongoingEl = document.getElementById('ongoing');
+  const completedEl = document.getElementById('completed');
+  ongoingEl.innerHTML = '';
+  completedEl.innerHTML = '';
+
+  allProjects.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = 'project-card show';
+    card.style.animationDelay = `${idx * 0.1}s`;
+    card.innerHTML = `
+      ${p.image ? `<img src="${p.image}" class="project-img" alt="${escapeHtml(p.title)}">` : ''}
+      <h2>${escapeHtml(p.title)}</h2>
+      <p>${escapeHtml(p.description).slice(0,100)}…</p>
+      <a href="/projects/${p.id}" class="project-link">Details</a>
+    `;
+    if (p.status === 'completed') {
+      completedEl.appendChild(card);
+    } else {
+      ongoingEl.appendChild(card);
+    }
+  });
+
+ // Если после отрисовки контейнер пустой — покажем сообщение
+  if (!ongoingEl.hasChildNodes()) {
+    ongoingEl.innerHTML = '<p class="empty-message">No ongoin projects.</p>';
+  }
+  if (!completedEl.hasChildNodes()) {
+    completedEl.innerHTML = '<p class="empty-message">No completed projects.</p>';
+  }
+  // Показ нужного таба
+  ongoingEl.classList.toggle('active', status === 'active');
+  completedEl.classList.toggle('active', status === 'completed');
+
+
+}
+
+// Устанавливаем клики на табы
+function setupTabs(allProjects) {
+  document.querySelectorAll('.tab-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProjectsList(allProjects, btn.getAttribute('data-tab'));
+    });
+  });
+}
+
+// 2) Загрузка и рендер деталей одного проекта
+function loadProjectDetail(id) {
+  fetch(`/api/projects/${id}`)
+    .then(r => {
+      if (!r.ok) throw new Error('Not found');
+      return r.json();
+    })
+    .then(p => {
+
+      const intro = document.querySelector('.projects-intro');
+      if (intro) intro.style.display = 'none';
+
+      document.getElementById('projects-list').style.display = 'none';
+      const detail = document.getElementById('project-detail');
+      detail.style.display = '';
+      detail.className = 'project-detail';
+      detail.innerHTML = `
+      <a href="/projects" class="btn-back">&larr; back</a>
+      <div class="project-detail-card">
+        ${p.image ? `<img src="${p.image}" class="detail-img" alt="${escapeHtml(p.title)}">` : ''}
+        <div class="detail-content">
+          <h1 class="detail-title">${escapeHtml(p.title)}</h1>
+           <p class="detail-status ${p.status}">${p.status === 'completed' ? 'completed' : 'ongoing'}</p>
+          <p class="detail-desc">${escapeHtml(p.description)}</p>
+        </div>
+      </div>
+    `;
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('project-detail').innerHTML = '<p>Проект не найден.</p>';
+    });
+}
+
+// Экранирование
+function escapeHtml(str='') {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+
+
+
+<script src="main.js"></script>
+
+</body>
+</html>

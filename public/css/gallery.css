@@ -1,0 +1,160 @@
+.gallery-container {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 20px 15px;
+
+}
+
+/* Контейнер сетки – вместо row/col-md */
+#photosContainer.gallery-grid {
+   
+  display: grid;
+  /* Каждая колонка минимум 250px, максимум 1fr */
+  grid-template-columns: repeat(auto-fill, minmax(350px, 2fr));
+  gap: 40px 30px;        /* Отступы между карточками */
+ 
+ 
+}
+
+/* Сама «фото-карточка» и «видео-карточка» */
+.photo-card,
+.video-card {
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  /* display:flex убрано */
+
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.photo-card img,
+.video-card video,
+.video-card .embed-responsive {
+  width: 100%;
+  height: auto;
+  display: block;
+
+
+}
+
+/* фиксируем высоту фоток, чтобы карточки были ровные */
+.photo-card img {
+  height: 250px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.photo-info,
+.video-info {
+  /* margin-top: auto убрано */
+  padding: 10px;
+  text-align: center;
+
+ 
+}
+
+.photo-title,
+.video-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #222;
+}
+
+
+
+#videosContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 20px;
+  
+ 
+}
+
+#videosContainer .video-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+#videosContainer video,
+#videosContainer iframe {
+  width: 100%;
+  height: auto;
+  max-height: 350px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+/* Удалили селекторы для subtitle, поскольку их нет */
+.nav-tabs {
+  border-bottom: none;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+
+  margin-bottom: 30px;
+}
+
+.nav-tabs .nav-item {
+  margin-bottom: 0;
+}
+
+/* Стили кнопок */
+.nav-tabs .nav-link {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 25px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none !important;
+  border: none !important;
+
+  min-width: 120px;         
+  text-align: center;       
+  padding: .5rem 1rem;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: #ddd;
+  color: #000;
+}
+
+/* Активная кнопка */
+.nav-tabs .nav-link.active {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+/* Стиль для пустого сообщения */
+.empty-message {
+  grid-column: 1 / -1;     /* заставляет элемент занимать все колонки */
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+  padding: 40px 0;
+}
+
+/* Анимация появления карточек */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+}
+
+.photo-card:hover { transform: translateY(-5px); }

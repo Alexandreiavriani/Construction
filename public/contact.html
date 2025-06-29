@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Form</title>
+
+  <!-- Ваши CSS-файлы -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/contact.css">
+
+  <!-- Остальные сторонние стили, которые у вас были -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <div class="hero-section">
+    <img
+      style="height: 300px;"
+      src="images/construcion img.jpg"
+      alt="Construction"
+      class="hero-img"
+    />
+    <div class="hero-overlay">
+      <h1>Contact</h1>
+    </div>
+  </div>
+
+
+
+    
+<div class="contact-info-cards animate-up delay-1">
+  <div class="card">
+    <i class="fa fa-map-marker-alt"></i>
+    <div class="info">
+      <h4>Full Address</h4>
+      <p>st. Example, 10, office 5, Tbilisi, Georgia</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <i class="fa fa-phone"></i>
+    <div class="info">
+      <h4>Phone</h4>
+      <p>+995 32 123 45 67</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <i class="fa fa-envelope"></i>
+    <div class="info">
+      <h4>E‑mail</h4>
+      <p>info@artsanit.ch</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <i class="fa fa-whatsapp"></i>
+    <div class="info">
+      <h4>WhatsApp</h4>
+      <p>+995 557 890 123</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <i class="fa fa-clock"></i>
+    <div class="info">
+      <h4>Working Hours</h4>
+      <p>Mon-Fri: 09:00–18:00<br>Sat: 10:00–14:00</p>
+    </div>
+  </div>
+</section>
+ 
+    <form  class="animate-up delay-2" id="contactForm" action="/contact" method="POST">
+      <h2 style=" color: #20242b; margin-bottom: 25px;">Contact us</h2>
+      <p style=" color: #20242b; margin-bottom: 25px;">Call, write to WhatsApp or send a request via the form:</p>
+
+      <label for="name">Your First Name </label>
+      <input type="text" id="name" name="name"  />
+
+      <label for="surname">Your Last Name </label>
+      <input type="text" id="surname" name="surname"  />
+
+      <label for="email">Your email address </label>
+      <input type="email" id="email" name="email"  />
+
+      <label for="phone">Your phone number </label>
+      <input type="tel" id="phone" name="phone"pattern="^\+?[0-9\s\-()]{7,20}$" title="Номер может содержать цифры, +, пробелы, дефисы и скобки"  />
+
+      <label for="message">Message </label>
+      <textarea id="message" name="message" rows="5" ></textarea>
+
+      <button class="contactbtn" type="submit">Submit</button>
+      <div id="response" style="margin-top: 20px;"></div>
+    </form>
+
+  <!-- <div class="contact-row">
+    <div class="contactTextBlock">
+      <div class="contactText">Contact Us</div>
+      <div class="contactText2">
+        Contact us to find out what Artsanit can do for you.<br /><br />
+        By phone 022 743 11 06, by email info@artsanit.ch or via our contact form.
+      </div>
+    </div>
+  </div> -->
+
+  </div>
+
+<section class="contact-us-block">
+  <div class="container">
+    <div class="contact-us-wrapper">
+      <img src="images/contact img.jpg" alt="Наш офис" class="contact-us-image" />
+      <div class="contact-us-text">
+        <p>
+          We are a  construction company in Georgia, specializing in 
+          premium residential and commercial projects. Our mission is to create comfortable and eco-friendly spaces for living and working.
+          <br>
+          Are you interested in our services? We would be delighted to assist you.
+        </p>
+        <a  href="tel:+995123456789" class="btn contact-us-btn">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  
+  <div id="site-footer"></div>
+
+  <!-- <script>
+  const phoneInput = document.getElementById('phone');
+
+  phoneInput.addEventListener('input', (e) => {
+    let value = phoneInput.value.replace(/\D/g, '');
+
+    // Удаляем все нецифровые символы и применяем формат
+    if (value.startsWith('995')) {
+      value = value.slice(3);
+    }
+
+    if (value.length > 9) value = value.slice(0, 9);
+
+    let formatted = '+995 ';
+    if (value.length > 0) formatted += value.slice(0, 3);
+    if (value.length > 3) formatted += ' ' + value.slice(3, 6);
+    if (value.length > 6) formatted += ' ' + value.slice(6);
+
+    phoneInput.value = formatted;
+  });
+</script> -->
+
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('contactForm');
+      const responseDiv = document.getElementById('response');
+
+      // Поля формы
+      const nameInput = document.getElementById('name');
+      const surnameInput = document.getElementById('surname');
+      const emailInput = document.getElementById('email');
+      const messageInput = document.getElementById('message');
+      const phoneInput = document.getElementById('phone');
+      
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Убираем класс invalid со всех полей перед проверкой
+        nameInput.classList.remove('invalid');
+        surnameInput.classList.remove('invalid')
+        emailInput.classList.remove('invalid');
+        messageInput.classList.remove('invalid');
+        phoneInput.classList.remove('invalid');
+
+        responseDiv.textContent = '';
+
+        // Берём значения и обрезаем пробелы
+        const nameValue = nameInput.value.trim();
+        const surnameValue = surnameInput.value.trim();
+        const emailValue = emailInput.value.trim();
+        const messageValue = messageInput.value.trim();
+        const phoneValue = phoneInput.value.trim(); 
+ 
+
+        let hasError = false;
+
+        // Проверяем каждое поле и, если пустое, помечаем его как invalid
+        if (!nameValue) {
+          nameInput.classList.add('invalid');
+          hasError = true;
+        }
+
+        if (!surnameValue) {
+          surnameInput.classList.add('invalid');
+          hasError = true;
+        }
+
+        if (!emailValue) {
+          emailInput.classList.add('invalid');
+          hasError = true;
+        }
+
+        if (!phoneValue) {              
+          phoneInput.classList.add('invalid');
+          hasError = true;
+        }
+
+        if (!messageValue) {
+          messageInput.classList.add('invalid');
+          hasError = true;
+        }
+
+        // Если хоть одно поле пустое, выводим сообщение и выходим
+        if (hasError) {
+          responseDiv.style.color = 'red';
+          responseDiv.textContent = 'Please fill in all required fields.';
+          return;
+        }
+
+        // Проверяем формат email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(emailValue)) {
+          emailInput.classList.add('invalid');
+          responseDiv.style.color = 'red';
+          responseDiv.textContent = 'Enter a correct email.';
+          return;
+        }
+
+        const anyPhonePattern = /^\+?[0-9\s\-()]{7,20}$/;
+        if (!anyPhonePattern.test(phoneValue)) {
+          responseDiv.textContent = 'Please enter a valid phone number';
+          responseDiv.style.color = 'red';
+          return;
+        }
+
+        
+        // Если всё прошло валидацию, формируем JSON-пакет и отправляем
+        const payload = { name: nameValue,surname: surnameValue, email: emailValue, phone: phoneValue, message: messageValue };
+
+        try {
+          const res = await fetch('/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+
+          if (res.ok) {
+            responseDiv.style.color = 'green';
+            responseDiv.textContent = result.message || 'The letter has been sent successfully.';
+            form.reset();
+          } else {
+            responseDiv.style.color = 'red';
+            responseDiv.textContent = result.error || 'There was an error sending.';
+          }
+        } catch (err) {
+          responseDiv.style.color = 'red';
+          responseDiv.textContent = 'Failed to send request. Try again later.';
+          console.error('Fetch Error:', err);
+        }
+      });
+    });
+  </script>
+
+
+
+
+  <script src="main.js"></script>
+</body>
+</html>

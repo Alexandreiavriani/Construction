@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel – Vacancies</title>
+  <link rel="stylesheet" href="../admin/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../admin/dist/css/adminlte.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a></li>
+      <li class="nav-item d-none d-sm-inline-block"><a href="/" class="nav-link">Main Page</a></li>
+      <a href="/admin/logout" class="btn btn-danger btn-sm ml-3">Logout</a>
+    </ul>
+  </nav>
+
+  <!-- Sidebar -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+      <span class="brand-text font-weight-light">Construction Admin</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column">
+          <li class="nav-item">
+            <a href="/admin/index.html" class="nav-link">
+              <i class="nav-icon fas fa-file-pdf"></i>
+              <p>PDF-Files</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/admin/projects.html" class="nav-link ">
+              <i class="nav-icon fas fa-project-diagram"></i>
+              <p>Projects</p>
+            </a>
+        </li>
+         <li class="nav-item">
+            <a href="/admin/gallery.html" class="nav-link">
+              <i class="nav-icon fas fa-image"></i>
+              <p>Gallery</p>
+            </a>
+        </li>
+          <li class="nav-item">
+            <a href="/admin/vacancy.html" class="nav-link active">
+              <i class="nav-icon fas fa-handshake"></i>
+              <p>Vacancy</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Users</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <div class="content-wrapper">
+    <div class="content-header"><h1 class="m-3">Vacancies</h1></div>
+    <div class="content"><div class="container-fluid">
+
+      <!-- Table -->
+      <h3>Vacancy List</h3>
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Position</th>
+            <th>Description</th>
+            <th>Responsibilities</th>
+            <th>Requirements</th>
+            <th>We offer</th>
+            <th>Location</th>
+            <th>Job Type</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="vacancyTableBody"></tbody>
+      </table>
+
+      <hr>
+      <!-- Add Form -->
+      <h4>Add New Vacancy</h4>
+      <form id="addVacancyForm" action="/admin/vacancies" method="POST">
+        <div class="form-group"><label>Position:</label><input type="text" name="position" class="form-control" required></div>
+        <div class="form-group"><label>Description:</label><textarea name="description" class="form-control" rows="3" placeholder="Optional"></textarea></div>
+        <div class="form-group"><label>Responsibilities:</label><textarea name="responsibilities" class="form-control" rows="4" placeholder="• Greet clients\n• Complete paperwork"></textarea></div>
+        <div class="form-group"><label>Requirements:</label><textarea name="requirements" class="form-control" rows="4" placeholder="• 2+ years experience\n• Medical license"></textarea></div>
+        <div class="form-group"><label>We Offer:</label><textarea name="we_offer" class="form-control" rows="4" placeholder="• Flexible schedule\n• Competitive salary"></textarea></div>
+        <div class="form-group"><label>Location:</label><input type="text" name="location" class="form-control" placeholder="e.g. Tbilisi" required></div>
+        <div class="form-group">
+          <label>Job Type:</label>
+          <select name="job_type" class="form-control" required>
+            <option value="Full-time">Full-time</option>
+            <option value="Part-time">Part-time</option>
+            <option value="Remote">Remote</option>
+            <option value="Freelance">Freelance</option>
+          </select>
+        </div>  
+
+        <button type="submit" class="btn btn-primary">Add Vacancy</button>
+      </form>
+
+    </div></div>
+  </div>
+
+  <footer class="main-footer text-center"><strong>Construction © 2025</strong></footer>
+</div>
+
+
+
+
+
+<!-- Edit Vacancy Modal -->
+<div class="modal fade" id="editVacancyModal" tabindex="-1" role="dialog" aria-labelledby="editVacancyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <form id="editVacancyForm">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Vacancy</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editId">
+          <div class="form-group"><label>Position</label><input type="text" id="editPosition" class="form-control" required></div>
+          <div class="form-group"><label>Description</label><textarea id="editDescription" class="form-control" rows="3"></textarea></div>
+          <div class="form-group"><label>Responsibilities</label><textarea id="editResponsibilities" class="form-control" rows="3"></textarea></div>
+          <div class="form-group"><label>Requirements</label><textarea id="editRequirements" class="form-control" rows="3"></textarea></div>
+          <div class="form-group"><label>We Offer</label><textarea id="editWeOffer" class="form-control" rows="3"></textarea></div>
+          <div class="form-group"><label>Location</label><input type="text" id="editLocation" class="form-control"></div>
+          <div class="form-group">
+            <label>Job Type</label>
+            <select id="editJobType" class="form-control">
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Remote">Remote</option>
+              <option value="Freelance">Freelance</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-- Scripts -->
+<script src="../admin/plugins/jquery/jquery.min.js"></script>
+<script src="../admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../admin/dist/js/adminlte.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    loadVacancies();
+    document.getElementById('addVacancyForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+      await fetch(form.action, { method: 'POST', body: data });
+      form.reset(); loadVacancies();
+    });
+  });
+
+  async function loadVacancies() {
+    try {
+      const resp = await fetch('/admin/vacancies/all', { headers: { 'Accept': 'application/json' }});
+      const items = await resp.json();
+      const tbody = document.getElementById('vacancyTableBody');
+      tbody.innerHTML = '';
+      items.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.id}</td>
+          <td>${item.position}</td>
+          <td>${item.description}</td>
+          <td>${item.responsibilities	}</td>
+          <td>${item.requirements	}</td>
+          <td>${item.we_offer	}</td>
+          <td>${item.location}</td>
+          <td>${item.job_type}</td>
+
+          <td>
+            <button class="btn btn-info btn-sm" onclick="onEdit(${item.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="onDelete(${item.id})">Delete</button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    } catch (e) { console.error(e); }
+  }
+
+async function onEdit(id) {
+  try {
+    const resp = await fetch(`/admin/vacancies/${id}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!resp.ok) throw new Error(resp.status);
+    const item = await resp.json();
+
+    // Заполняем поля
+    document.getElementById('editId').value = item.id;
+    document.getElementById('editPosition').value = item.position;
+    document.getElementById('editDescription').value = item.description || '';
+    document.getElementById('editResponsibilities').value = item.responsibilities || '';
+    document.getElementById('editRequirements').value = item.requirements || '';
+    document.getElementById('editWeOffer').value = item.we_offer || '';
+    document.getElementById('editLocation').value = item.location || '';
+    document.getElementById('editJobType').value = item.job_type || 'Full-time';
+
+    // Показываем модалку
+    $('#editVacancyModal').modal('show');
+
+  } catch (e) {
+    console.error('Не удалось загрузить вакансию для редактирования:', e);
+  }
+}
+
+
+
+document.getElementById('editVacancyForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const id = document.getElementById('editId').value;
+
+  const updatedVacancy = {
+    position: document.getElementById('editPosition').value,
+    description: document.getElementById('editDescription').value,
+    responsibilities: document.getElementById('editResponsibilities').value,
+    requirements: document.getElementById('editRequirements').value,
+    we_offer: document.getElementById('editWeOffer').value,
+    location: document.getElementById('editLocation').value,
+    job_type: document.getElementById('editJobType').value,
+  };
+
+  try {
+    await fetch(`/admin/vacancies/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedVacancy)
+    });
+
+    $('#editVacancyModal').modal('hide');
+    loadVacancies();
+  } catch (e) {
+    console.error('Ошибка при обновлении:', e);
+    alert('Не удалось сохранить изменения');
+  }
+});
+
+
+  async function onDelete(id) {
+    if (!confirm('Delete vacancy #' + id + '?')) return;
+    await fetch(`/admin/vacancies/${id}`, { method: 'DELETE' }); loadVacancies();
+  }
+</script>
+
+
+
+</body>
+</html>

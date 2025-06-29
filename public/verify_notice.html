@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Подтверждение email</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+  
+  <!-- <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
+
+    // Если нет email или пользователь уже подтвердил email — уходим на login
+    if (!email || localStorage.getItem("email_verified") === "true") {
+      window.location.href = "/login.html";
+    }
+
+    // Отображаем email на странице
+    document.getElementById("emailDisplay").textContent = email;
+  });
+</script> -->
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #fff;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 500px;
+      padding: 20px;
+    }
+
+    img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    p {
+      color: #555;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .email {
+      font-weight: bold;
+      color: #000;
+    }
+
+    .btn {
+      background-color: #1d9c44;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn:hover {
+      background-color: #168538;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="images/mail.png" alt="">
+    <h2>Please confirm your email address to continue.</h2>
+    <p>We just sent an email to:</p>
+    <p class="email" id="emailDisplay">your@email.com</p>
+    <p>Check your email and follow the confirmation link</p>
+  </div>
+
+  <script>
+    
+    // Подставим email, если он передан через query-параметры
+    const params = new URLSearchParams(window.location.search);
+    const email = params.get("email");
+    if (email) {
+      document.getElementById("emailDisplay").textContent = email;
+    }
+    
+  // ✅ Автопереход в login.html, если email уже подтверждён
+  if (localStorage.getItem("email_verified") === "true") {
+    window.location.href = "/login.html?verified=1";
+  }
+    
+  </script>
+</body>
+</html>

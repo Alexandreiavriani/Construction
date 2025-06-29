@@ -1,0 +1,77 @@
+
+</style>
+<nav class="custom-navbar" id="navbar">
+   <button class="hamburger" id="hamburger">☰</button>
+  <a href="index.html"><img src="images/logo.png" alt="Logo" class="logo"></a>
+ 
+  <ul class="nav-links">
+    <li><a data-i18n-key="nav_home" href="index.html">Home</a></li>
+
+    <li class="dropdown">
+      <a href="who-we-are.html">Who we are</a>
+       <ul class="dropdown-menu">
+         <li><a href="who-we-are.html#explanation">Some explanation about us</a></li>
+         <li><a href="who-we-are.html#vision">Our vision</a></li>
+      </ul>
+    </li>
+
+    <li class="dropdown">
+      <a href="our_services.html">Our Services</a>
+      <ul class="dropdown-menu">
+        <li><a href="our_services.html#projecting">Projecting</a></li>
+        <li><a href="our_services.html#estimation">Estimation worksheet</a></li>
+        <li><a href="our_services.html#design">Design</a></li>
+        <li><a href="our_services.html#engineering ">Engineering </a></li>
+        <li><a href="our_services.html#renovation ">Renovation </a></li>
+        <li><a href="our_services.html#demolishing ">Demolishing old buildings </a></li>
+        <li><a href="our_services.html#load ">load transferring service </a></li>
+        <li><a href="our_services.html#wooden ">Wooden Furniture</a></li>
+      </ul>
+    </li>
+
+
+
+    <li><a href="contact.html">Contact us</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="vacancy.html">Career</a></li>
+    <li><a href="#">Shop</a></li>
+  </ul>
+
+    <!-- Переключатель языков -->
+  <nav>
+<button onclick="changeLanguage('en')">English</button>
+<button onclick="changeLanguage('ru')">Русский</button>
+<button onclick="changeLanguage('ka')">ქართული</button>
+  </nav>
+
+  
+  <ul class="social-links">
+    <a href="tel:+1234567890" id="phone-link">
+      <span id="phone-symbol">📞</span>
+      <span id="phone-number" style="display:none;">+1 (234) 567-890</span>
+    </a>
+    <a href="https://www.facebook.com/ВАША_СТРАНИЦА" target="_blank" class="social-icon facebook">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://www.instagram.com/ВАША_СТРАНИЦА" target="_blank" class="social-icon instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+  </ul>
+ <!-- <a id="guestIcon" href="login.html"><img src="images/Sample_User_Icon.png" alt="User Icon" width="35"></a>  -->
+<div style='display:flex; gap: 15px; '>
+<a class="loginbtn" id="loginLink" href="login.html"><p>Log in</p></a> 
+<a class="loginbtn" id="signupLink" href="register.html"><p>Sign up</p></a> 
+</div>
+  <li id="userDropdownContainer" class="nav-item dropdown" style="display:none; list-style:none; position:relative;">
+    <a href="#" class="user-toggle" id="userToggle">
+      <span id="userEmail"></span>
+      <i class="fas fa-user-circle"></i>
+    </a>
+    <ul class="dropdown-menu" id="userMenu" style="display:none; position:absolute; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,.2); list-style:none; padding:0; margin:0;">
+      <li style="padding:5px 15px;"><a href="/user/logout">Log out</a></li>
+    </ul>
+  </li>
+</nav>
+
+

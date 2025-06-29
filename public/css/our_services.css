@@ -1,0 +1,129 @@
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 225px;  
+}
+
+/* Base & Container */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* padding: 60px 0; */
+}
+
+/* Section Title */
+.services__title {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #1a1a1a;
+}
+.services__subtitle {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 48px;
+  color: #666;
+}
+
+/* Services List */
+.services__list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* 1) ОБЩЕЕ правило для всех сервис-блоков */
+.service {
+  display: flex;
+  align-items: center;
+ 
+  /* по умолчанию: изображение слева, текст справа */
+}
+
+/* 2) ПЕРЕОПРЕДЕЛЕНИЕ для всех чётных (2-й, 4-й, ...) */
+.services__list > .service:nth-child(even) {
+  flex-direction: row-reverse; /* изображение справа, текст слева */
+}
+
+/* Медиа-контейнер */
+.service__media {
+  flex: 1 1 45%;
+}
+.service__media img {
+  width: 500px;
+  height: 500px;
+  object-fit: cover;
+ 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Инфо-контейнер */
+.service__info {
+  flex: 1 1 45%;
+  padding:0 50px;
+  text-align: left;
+  
+}
+.service__number {
+  display: block;
+  font-size: 0.9rem;
+  color: #007bff;
+  margin-bottom: 8px;
+  font-weight: bold;
+  text-align: left;
+}
+.service__heading {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+  text-align: left;
+}
+.service__text {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* Кнопка */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: background-color .3s;
+  
+   margin-top: 20px; 
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .service {
+    flex-direction: column;
+    text-align: center;
+  }
+  .services__list > .service:nth-child(even) {
+    flex-direction: column;
+  }
+  .service__media,
+  .service__info {
+    flex: 1 1 100%;
+  }
+  .service__media {
+    margin-bottom: 24px;
+  }
+}
