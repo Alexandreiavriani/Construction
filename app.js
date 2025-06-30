@@ -97,81 +97,98 @@ const contactRoutes = require('./routes/contactRoutes');
 const galleryRoutes = require('./routes/galleryRoutes');
 const vacancyRoutes = require('./routes/vacancyRoutes');
 const adminAuth     = require('./middlewares/adminAuth');
-  
 
-// const authController = require('./controllers/authController');
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use(session({
   name: 'admin.sid',
   secret: process.env.SESSION_SECRET || 'super_secret_key',
   resave: false,
   saveUninitialized: false,
-  rolling: true, //  обновляет maxAge при каждом запросе
-  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: 'lax', secure: false, httpOnly: true}
+  rolling: true, // обновляет maxAge при каждом запросе
+  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7, sameSite: 'lax', secure: false, httpOnly: true }
 }));
 
-// Логирование
+// Логирование запросов
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
 
-// 1) Маршрут логина админа (доступен без сессии)
-app.get('/admin/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'login.html'));
-});
-app.post('/admin/login', authRoutes); // пусть твой authRoutes обрабатывает POST /admin/login
-
-// 2) Навешиваем защиту на весь /admin
-app.use('/admin', adminAuth);
-
-
-// 3) После проверки отдаём всё, что лежит в public/admin (html, css, js…)
-app.use(
-  '/admin',
-  express.static(path.join(__dirname, 'public', 'admin'))
-);
-
-
-
-// 4) Включаем собственные админ-роуты (если есть дополнительные endpoints)
-app.use('/admin', adminRoutes);
-
-// 5) Если ещё есть админ-галерея
-app.use('/admin/gallery', galleryRoutes);
-
-app.use('/admin/vacancies', vacancyRoutes); 
-
-// —————————————————————————————————————————
-
-// Остальные публичные маршруты
-app.use(authRoutes);
-app.use('/api', authRoutes);
-app.use(pdfRoutes);
-app.use('/gallery', galleryRoutes);
+// --- ПУБЛИЧНАЯ СТАТИКА ---
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(contactRoutes);
-app.use(projectRoutes);
-app.use('/api', projectRoutes);
-app.use('/vacancies', vacancyRoutes);
 
+// --- ПУБЛИЧНЫЕ МАРШРУТЫ ---
+
+// Главная страница
+app.get('/', (req, res) => {
+  console.log('GET / обработан');
+  res.render('index', { title: 'Главная' });
+});
+
+app.get('/index', (req, res) => {
+  console.log('GET / обработан');
+  res.render('index', { title: 'Главная' });
+});
+
+app.get('/who_we_are', (req, res) => {
+  console.log('GET / обработан');
+  res.render('who_we_are', { title: 'Главная' });
+});
+
+// Страницы проектов (спа)
 app.get('/projects', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'projects.html'));
 });
-
-// 2) Детальная страница (SPA-подход — тот же HTML)
 app.get('/projects/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'projects.html'));
 });
 
-// Редирект с корня
-app.get('/', (req, res) => res.redirect('/admin/projects'));
-// app.get('/logout', authController.logout);
+// --- АВТОРИЗАЦИЯ АДМИНА ---
 
-// Обработка 404 — такой страницы нет
+// Страница логина без проверки сессии
+app.get('/admin/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin', 'login.html'));
+});
+
+// Защита админских маршрутов (кроме /admin/login)
+app.use('/admin', (req, res, next) => {
+  if (req.path === '/login') return next();
+  adminAuth(req, res, next);
+});
+
+// Статика админки (css, js, html)
+app.use('/admin', express.static(path.join(__dirname, 'public', 'admin')));
+
+// Дополнительные админские роуты
+app.use('/admin', adminRoutes);
+app.use('/admin/gallery', galleryRoutes);
+app.use('/admin/vacancies', vacancyRoutes);
+
+// --- ОСТАЛЬНЫЕ РОУТЫ ---
+
+app.use(authRoutes);
+app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
+
+app.use(pdfRoutes);
+app.use('/gallery', galleryRoutes);
+
+app.use(contactRoutes);
+
+app.use(projectRoutes);
+app.use('/api', projectRoutes);
+
+app.use('/vacancies', vacancyRoutes);
+
+// --- ОБРАБОТКА ОШИБОК ---
+
+// 404 - не найдено
 app.use((req, res) => {
   res.status(404).send(`
     <html>
@@ -184,13 +201,14 @@ app.use((req, res) => {
   `);
 });
 
-// Ошибки
+// 500 - ошибка сервера
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Ошибка сервера');
 });
 
+// --- СТАРТ СЕРВЕРА ---
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => 
-  console.log(`Сервер запущен: http://localhost:${PORT}`)
-);
+app.listen(PORT, () => {
+  console.log(`Сервер запущен: http://localhost:${PORT}`);
+});
