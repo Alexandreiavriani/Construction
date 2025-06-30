@@ -125,21 +125,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- ПУБЛИЧНЫЕ МАРШРУТЫ ---
 
-// Главная страница
-app.get('/', (req, res) => {
-  console.log('GET / обработан');
-  res.render('index', { title: 'Главная' });
-});
 
-app.get('/index', (req, res) => {
-  console.log('GET / обработан');
-  res.render('index', { title: 'Главная' });
-});
-
-app.get('/who_we_are', (req, res) => {
-  console.log('GET / обработан');
-  res.render('who_we_are', { title: 'Главная' });
-});
 
 // Страницы проектов (спа)
 app.get('/projects', (req, res) => {
@@ -187,7 +173,19 @@ app.use('/api', projectRoutes);
 app.use('/vacancies', vacancyRoutes);
 
 // --- ОБРАБОТКА ОШИБОК ---
+// Главная страница
 
+app.get('/', (req, res) => {
+  res.render('index', { title: 'Главная' });
+});
+
+app.get('/:page.html', (req, res, next) => {
+  const page = req.params.page;
+  res.render(page, {}, function (err, html) {
+    if (err) return next(); // если шаблон не найден — передаём 404
+    res.send(html);
+  });
+});
 // 404 - не найдено
 app.use((req, res) => {
   res.status(404).send(`
